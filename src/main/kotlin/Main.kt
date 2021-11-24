@@ -6,6 +6,7 @@ const val START_GENERATOR = 0.5
 const val PI1_GENERATOR = 0.6
 const val PI2_GENERATOR = 0.6
 const val COUNT = 10000000
+const val COUNT_MATH = COUNT.toDouble()
 val random = Random()
 
 fun getBooleanWithProbability(probability: Double): Boolean {
@@ -35,8 +36,24 @@ fun main(args: Array<String>) {
     }
     SystemState.values().forEach { state ->
         if (states.containsKey(state)) {
-            val part = states[state]?.div(COUNT.toDouble())
+            val part = states[state]?.div(COUNT_MATH)
             println("${state.name} $part")
         }
     }
+    val A = system.processed / COUNT_MATH
+    val Q = system.processed / system.generated.toDouble()
+    val rejectQ = (pi1.rejectedCount + queue.rejectedCount) / system.generated.toDouble()
+    println("Абсолютная пропускная способность $A")
+    println("Относительная пропускная способность $Q")
+    println("Веротность отказа $rejectQ")
+    println("Средняя длина очереди ${queue.stateSum / COUNT_MATH}")
+    println("Среднее число заявок в системе ${system.requestsCount / COUNT_MATH}")
+    val timeInQueue = (queue.stateSum) / (system.generated - queue.rejectedCount).toDouble()
+    val timeInPi1 = (pi1.stateCount) / (system.generated - queue.rejectedCount - pi1.rejectedCount)
+    val timeInPi2 = (pi2.stateCount) / (system.generated - queue.rejectedCount - pi1.rejectedCount)
+    println("Среднее время пребывания заявки в очереди $timeInQueue")
+    println("Среднее время пребывания заявки в системе ${timeInQueue + timeInPi1 + timeInPi2}")
+    println("Коэффициент загрузки канала pi1 ${pi1.stateCount / COUNT_MATH}")
+    println("Коэффициент загрузки канала pi2 ${pi2.stateCount / COUNT_MATH}")
+
 }

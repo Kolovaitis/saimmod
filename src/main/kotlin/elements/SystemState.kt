@@ -11,10 +11,21 @@ enum class SystemState(val queue: Int?, val pi1: Boolean?, val pi2: Boolean?) {
     H(1, true, true),
     UNDEFINED(null, null, null);
 
+    val count: Int = (queue ?: 0) + pi1.toInt() + pi2.toInt()
+
     companion object {
         fun findState(queue: Int, pi1: Boolean, pi2: Boolean): SystemState {
             return values().find { queue == it.queue && pi1 == it.pi1 && pi2 == it.pi2 } ?: UNDEFINED
         }
+    }
+
+}
+
+fun Boolean?.toInt(): Int {
+    return if (this == true) {
+        1
+    } else {
+        0
     }
 
 }
