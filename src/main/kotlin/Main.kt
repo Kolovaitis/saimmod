@@ -5,7 +5,7 @@ import java.util.*
 const val START_GENERATOR = 0.5
 const val PI1_GENERATOR = 0.6
 const val PI2_GENERATOR = 0.6
-
+const val COUNT = 10000000
 val random = Random()
 
 fun getBooleanWithProbability(probability: Double): Boolean {
@@ -29,11 +29,14 @@ fun main(args: Array<String>) {
     val pi2 = ProbableChannel(pi2Generator, false)
     val system = ComplexSystem(generator, queue, pi1, pi2)
     val states = mutableMapOf<SystemState, Int>()
-    for (i in 1..1000000) {
+    for (i in 1..COUNT) {
         val state = system.tick()
         states[state] = (states[state] ?: 0) + 1
     }
-    states.forEach { (state, probability) ->
-        println("${state.name} ${probability / 1000000.0}")
+    SystemState.values().forEach { state ->
+        if (states.containsKey(state)) {
+            val part = states[state]?.div(COUNT.toDouble())
+            println("${state.name} $part")
+        }
     }
 }
