@@ -3,8 +3,8 @@ import elements.Queue
 import java.util.*
 
 const val START_GENERATOR = 0.5
-const val PI1_GENERATOR = 0.6
-const val PI2_GENERATOR = 0.6
+const val PI1_GENERATOR = 0.9
+const val PI2_GENERATOR = 0.0
 const val COUNT = 10000000
 const val COUNT_MATH = COUNT.toDouble()
 val random = Random()
@@ -49,8 +49,8 @@ fun main(args: Array<String>) {
     println("Средняя длина очереди ${queue.stateSum / COUNT_MATH}")
     println("Среднее число заявок в системе ${system.requestsCount / COUNT_MATH}")
     val timeInQueue = (queue.stateSum) / (system.generated - queue.rejectedCount).toDouble()
-    val timeInPi1 = (pi1.stateCount) / (system.generated - queue.rejectedCount - pi1.rejectedCount)
-    val timeInPi2 = (pi2.stateCount) / (system.generated - queue.rejectedCount - pi1.rejectedCount)
+    val timeInPi1 = (pi1.stateCount) / (system.generated - queue.rejectedCount - pi1.rejectedCount).toDouble()
+    val timeInPi2 = (pi2.stateCount) / (system.processed).toDouble()
     println("Среднее время пребывания заявки в очереди $timeInQueue")
     println("Среднее время пребывания заявки в системе ${timeInQueue + timeInPi1 + timeInPi2}")
     println("Коэффициент загрузки канала pi1 ${pi1.stateCount / COUNT_MATH}")
